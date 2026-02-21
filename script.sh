@@ -108,19 +108,23 @@ echo "LANG=fr_FR.UTF-8" > /etc/locale.conf
 echo "==> Configuration des utilisateurs"
 useradd -m -G wheel pere
 useradd -m fils
-echo "pere:azerty123" | chpasswd
-echo "fils:azerty123" | chpasswd
+echo "123" | passwd --stdin pere
+echo "123" | passwd --stdin fils
 
 echo "==> Configuration des groupes et volume partagé"
 groupadd famille
 usermod -aG famille pere
 usermod -aG famille fils
-chown :famille /share
-chmod 770 /share
+chown :famille /mnt/share
+chmod 770 /mnt/share
 
 echo "==> Activation du Réseau et de Gnome"
 systemctl enable NetworkManager
 systemctl enable gdm
+mkdir -p /etc/gdm
+echo '[daemon]' > /etc/gdm/custom.conf
+echo 'WaylandEnable=false' >> /etc/gdm/custom.conf
+
 
 echo "==> Configuration de base i3"
 mkdir -p /home/pere/.config/i3
