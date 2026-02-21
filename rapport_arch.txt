@@ -1,0 +1,728 @@
+----- lsblk -f -----
+NAME              FSTYPE      FSVER            LABEL       UUID                                   FSAVAIL FSUSE% MOUNTPOINTS
+sda                                                                                                              
+├─sda1            vfat        FAT32                        A3F4-4967                              1021,6M     0% /boot/efi
+└─sda2            crypto_LUKS 2                            07b461a1-c1a4-4b26-82a8-e682e8e8a384                  
+  └─cryptlvm      LVM2_member LVM2 001                     INZL0E-9vfJ-yjp5-CbB8-JG9u-QY3Z-MLq7eW                
+    ├─vg0-root    ext4        1.0                          52242787-1b8b-4e22-bacf-52ceba785ba4      5,1G    43% /
+    ├─vg0-swap    swap        1                            e7a4bf30-a07e-4a05-9001-432bb3e0bd53                  [SWAP]
+    ├─vg0-virtbox ext4        1.0                          9cb123da-13bf-491c-a38d-e4cd82fde56d     18,5G     0% /var/lib/virtualbox
+    ├─vg0-share   ext4        1.0                          30e26e8c-a841-44b6-a7ae-f64a0abaaeee      4,6G     0% /share
+    ├─vg0-secret  crypto_LUKS 2                            cbb724a9-1a95-40c0-a8e5-f87e95c664b4                  
+    └─vg0-home    ext4        1.0                          e9be84a4-ceb1-408a-af33-dc00ac38229f     24,1G     0% /home
+sr0               iso9660     Joliet Extension ARCH_202602 2026-02-01-08-05-47-00                                
+
+----- /etc/passwd -----
+root:x:0:0::/root:/usr/bin/bash
+bin:x:1:1::/:/usr/bin/nologin
+daemon:x:2:2::/:/usr/bin/nologin
+mail:x:8:12::/var/spool/mail:/usr/bin/nologin
+ftp:x:14:11::/srv/ftp:/usr/bin/nologin
+http:x:33:33::/srv/http:/usr/bin/nologin
+nobody:x:65534:65534:Kernel Overflow User:/:/usr/bin/nologin
+dbus:x:81:81:System Message Bus:/:/usr/bin/nologin
+systemd-coredump:x:978:978:systemd Core Dumper:/:/usr/bin/nologin
+systemd-network:x:977:977:systemd Network Management:/:/usr/bin/nologin
+systemd-oom:x:976:976:systemd Userspace OOM Killer:/:/usr/bin/nologin
+systemd-journal-remote:x:975:975:systemd Journal Remote:/:/usr/bin/nologin
+systemd-resolve:x:974:974:systemd Resolver:/:/usr/bin/nologin
+systemd-timesync:x:973:973:systemd Time Synchronization:/:/usr/bin/nologin
+tss:x:972:972:tss user for tpm2:/:/usr/bin/nologin
+uuidd:x:971:971:UUID generator helper daemon:/var/lib/libuuid:/usr/bin/nologin
+alpm:x:970:970:Arch Linux Package Management:/:/usr/bin/nologin
+avahi:x:969:969:Avahi mDNS/DNS-SD daemon:/:/usr/bin/nologin
+pcscd:x:968:968:PC/SC Smart Card Daemon:/:/usr/bin/nologin
+polkitd:x:102:102:User for polkitd:/:/usr/bin/nologin
+pere:x:1000:1000::/home/pere:/usr/bin/bash
+fils:x:1001:1001::/home/fils:/usr/bin/bash
+
+----- /etc/group -----
+root:x:0:root
+sys:x:3:bin
+mem:x:8:
+ftp:x:11:
+mail:x:12:
+log:x:19:
+smmsp:x:25:
+proc:x:26:
+games:x:50:
+lock:x:54:
+network:x:90:
+floppy:x:94:
+scanner:x:96:
+power:x:98:
+nobody:x:65534:
+adm:x:999:daemon
+wheel:x:998:pere
+empower:x:997:
+utmp:x:996:
+audio:x:995:
+clock:x:994:
+disk:x:993:
+input:x:992:
+kmem:x:991:
+kvm:x:990:
+lp:x:989:
+optical:x:988:
+render:x:987:
+sgx:x:986:
+storage:x:985:
+tty:x:5:
+uucp:x:984:
+video:x:983:
+users:x:982:
+groups:x:981:
+systemd-journal:x:980:
+rfkill:x:979:
+bin:x:1:daemon
+daemon:x:2:bin
+http:x:33:
+dbus:x:81:
+systemd-coredump:x:978:
+systemd-network:x:977:
+systemd-oom:x:976:
+systemd-journal-remote:x:975:
+systemd-resolve:x:974:
+systemd-timesync:x:973:
+tss:x:972:
+uuidd:x:971:
+polkitd:x:102:
+vboxusers:x:108:pere
+alpm:x:970:
+avahi:x:969:
+pcscd:x:968:
+pere:x:1000:
+fils:x:1001:
+famille:x:1002:pere,fils
+
+----- /etc/fstab -----
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# <file system> <dir> <type> <options> <dump> <pass>
+# /dev/mapper/vg0-root
+UUID=52242787-1b8b-4e22-bacf-52ceba785ba4	/         	ext4      	rw,relatime	0 1
+
+# /dev/sda1
+UUID=A3F4-4967      	/boot/efi 	vfat      	rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro	0 2
+
+# /dev/mapper/vg0-home
+UUID=e9be84a4-ceb1-408a-af33-dc00ac38229f	/home     	ext4      	rw,relatime	0 2
+
+# /dev/mapper/vg0-share
+UUID=30e26e8c-a841-44b6-a7ae-f64a0abaaeee	/share    	ext4      	rw,relatime	0 2
+
+# /dev/mapper/vg0-virtbox
+UUID=9cb123da-13bf-491c-a38d-e4cd82fde56d	/var/lib/virtualbox	ext4      	rw,relatime	0 2
+
+# /dev/mapper/vg0-swap
+UUID=e7a4bf30-a07e-4a05-9001-432bb3e0bd53	none      	swap      	defaults  	0 0
+
+tmpfs  /tmp  tmpfs  defaults,noexec,nosuid,nodev 0 0
+
+----- /etc/mtab -----
+proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
+sys /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0
+dev /dev devtmpfs rw,nosuid,relatime,size=4031888k,nr_inodes=1007972,mode=755,inode64 0 0
+run /run tmpfs rw,nosuid,nodev,relatime,mode=755,inode64 0 0
+efivarfs /sys/firmware/efi/efivars efivarfs rw,nosuid,nodev,noexec,relatime 0 0
+/dev/mapper/vg0-root / ext4 rw,relatime 0 0
+securityfs /sys/kernel/security securityfs rw,nosuid,nodev,noexec,relatime 0 0
+tmpfs /dev/shm tmpfs rw,nosuid,nodev,inode64,usrquota 0 0
+devpts /dev/pts devpts rw,nosuid,noexec,relatime,gid=5,mode=600,ptmxmode=000 0 0
+cgroup2 /sys/fs/cgroup cgroup2 rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot,memory_hugetlb_accounting 0 0
+none /sys/fs/pstore pstore rw,nosuid,nodev,noexec,relatime 0 0
+bpf /sys/fs/bpf bpf rw,nosuid,nodev,noexec,relatime,mode=700 0 0
+systemd-1 /proc/sys/fs/binfmt_misc autofs rw,relatime,fd=42,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=7019 0 0
+none /run/credentials/systemd-journald.service tmpfs ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,inode64,noswap 0 0
+tracefs /sys/kernel/tracing tracefs rw,nosuid,nodev,noexec,relatime 0 0
+fusectl /sys/fs/fuse/connections fusectl rw,nosuid,nodev,noexec,relatime 0 0
+configfs /sys/kernel/config configfs rw,nosuid,nodev,noexec,relatime 0 0
+mqueue /dev/mqueue mqueue rw,nosuid,nodev,noexec,relatime 0 0
+debugfs /sys/kernel/debug debugfs rw,nosuid,nodev,noexec,relatime 0 0
+hugetlbfs /dev/hugepages hugetlbfs rw,nosuid,nodev,relatime,pagesize=2M 0 0
+tmpfs /tmp tmpfs rw,nosuid,nodev,noexec,relatime,inode64 0 0
+/dev/mapper/vg0-share /share ext4 rw,relatime 0 0
+/dev/mapper/vg0-home /home ext4 rw,relatime 0 0
+/dev/mapper/vg0-virtbox /var/lib/virtualbox ext4 rw,relatime 0 0
+/dev/sda1 /boot/efi vfat rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro 0 0
+none /run/credentials/getty@tty1.service tmpfs ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,inode64,noswap 0 0
+tmpfs /run/user/1000 tmpfs rw,nosuid,nodev,relatime,size=808876k,nr_inodes=202219,mode=700,uid=1000,gid=1000,inode64 0 0
+vmhgfs-fuse /mnt/hgfs fuse.vmhgfs-fuse rw,nosuid,nodev,relatime,user_id=0,group_id=0,allow_other 0 0
+
+----- cat de /etc -----
+adjtime
+arch-release
+audisp
+audit
+avahi
+bash.bash_logout
+bash.bashrc
+bash_completion.d
+bindresvport.blacklist
+binfmt.d
+ca-certificates
+conf.d
+credstore
+credstore.encrypted
+cryptsetup-keys.d
+crypttab
+dconf
+debuginfod
+default
+depmod.d
+e2scrub.conf
+environment
+ethertypes
+fonts
+fstab
+fuse.conf
+gai.conf
+gdb
+gnutls
+gprofng.rc
+group
+group-
+grub.d
+gshadow
+gshadow-
+gtk-3.0
+healthd.conf
+host.conf
+hostname
+hosts
+i3
+i3status.conf
+initcpio
+inputrc
+iptables
+issue
+jack
+kernel
+keyutils
+krb5.conf
+ld.so.cache
+ld.so.conf
+ld.so.conf.d
+libaudit.conf
+libinput
+libnl
+libva.conf
+locale.conf
+locale.gen
+localtime
+login.defs
+lsb-release
+lvm
+machine-id
+mailcap
+makepkg.conf
+makepkg.conf.d
+makepkg.d
+mime.types
+mke2fs.conf
+mkinitcpio.conf
+mkinitcpio.conf.d
+mkinitcpio.d
+modprobe.d
+modules-load.d
+mtab
+nanorc
+netconfig
+NetworkManager
+nginx
+nsswitch.conf
+openldap
+os-release
+pacman.conf
+pacman.d
+pam.d
+passwd
+passwd-
+pkcs11
+polkit-1
+profile
+profile.d
+protocols
+pulse
+rc_keymaps
+rc_maps.cfg
+request-key.conf
+request-key.d
+resolv.conf
+rpc
+securetty
+security
+sensors3.conf
+sensors.d
+services
+shadow
+shadow-
+shells
+skel
+slsh.rc
+ssh
+ssl
+subgid
+subgid-
+subuid
+subuid-
+sudo.conf
+sudoers
+sudoers.d
+sudo_logsrvd.conf
+sysctl.d
+systemd
+tmpfiles.d
+tpm2-tss
+ts.conf
+udev
+vbox
+vconsole.conf
+vdpau_wrapper.cfg
+vimrc
+vmware-tools
+wpa_supplicant
+X11
+xattr.conf
+xdg
+
+----- HOSTNAME -----
+archsib
+
+----- Pacman Installed -----
+[2026-02-21T19:41:40+0000] [ALPM] installed iana-etc (20260203-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed filesystem (2025.10.12-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed linux-api-headers (6.19-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed tzdata (2025c-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed glibc (2.43+r5+g856c426a7534-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed libasan (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed libatomic (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed libgfortran (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed libgcc (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed libgomp (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed liblsan (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed libobjc (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed libquadmath (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed libstdc++ (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed libtsan (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed libubsan (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:40+0000] [ALPM] installed gcc-libs (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:41+0000] [ALPM] installed ncurses (6.6-1)
+[2026-02-21T19:41:41+0000] [ALPM] installed readline (8.3.003-1)
+[2026-02-21T19:41:41+0000] [ALPM] installed bash (5.3.9-1)
+[2026-02-21T19:41:41+0000] [ALPM] installed acl (2.3.2-1)
+[2026-02-21T19:41:41+0000] [ALPM] installed attr (2.5.2-1)
+[2026-02-21T19:41:41+0000] [ALPM] installed gmp (6.3.0-3)
+[2026-02-21T19:41:41+0000] [ALPM] installed zlib (1:1.3.2-2)
+[2026-02-21T19:41:41+0000] [ALPM] installed sqlite (3.51.2-1)
+[2026-02-21T19:41:41+0000] [ALPM] installed util-linux-libs (2.41.3-2)
+[2026-02-21T19:41:41+0000] [ALPM] installed e2fsprogs (1.47.3-2)
+[2026-02-21T19:41:41+0000] [ALPM] installed keyutils (1.6.3-3)
+[2026-02-21T19:41:41+0000] [ALPM] installed gdbm (1.26-2)
+[2026-02-21T19:41:41+0000] [ALPM] installed openssl (3.6.1-1)
+[2026-02-21T19:41:41+0000] [ALPM] installed libsasl (2.1.28-5)
+[2026-02-21T19:41:41+0000] [ALPM] installed libldap (2.6.12-1)
+[2026-02-21T19:41:41+0000] [ALPM] installed libevent (2.1.12-5)
+[2026-02-21T19:41:41+0000] [ALPM] installed libverto (0.3.2-5)
+[2026-02-21T19:41:41+0000] [ALPM] installed lmdb (0.9.33-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed krb5 (1.21.3-2)
+[2026-02-21T19:41:42+0000] [ALPM] installed libcap-ng (0.9-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed audit (4.1.2-2)
+[2026-02-21T19:41:42+0000] [ALPM] installed libxcrypt (4.5.2-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed libtirpc (1.3.7-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed libnsl (2.0.1-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed pambase (20250719-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed libgpg-error (1.59-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed libgcrypt (1.12.0-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed lz4 (1:1.10.0-2)
+[2026-02-21T19:41:42+0000] [ALPM] installed xz (5.8.2-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed zstd (1.5.7-3)
+[2026-02-21T19:41:42+0000] [ALPM] installed systemd-libs (259.1-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed pam (1.7.2-2)
+[2026-02-21T19:41:42+0000] [ALPM] installed libcap (2.77-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed coreutils (9.10-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed bzip2 (1.0.8-6)
+[2026-02-21T19:41:42+0000] [ALPM] installed libseccomp (2.6.0-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed file (5.46-5)
+[2026-02-21T19:41:42+0000] [ALPM] installed findutils (4.10.0-3)
+[2026-02-21T19:41:42+0000] [ALPM] installed mpfr (4.2.2-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed gawk (5.3.2-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed pcre2 (10.47-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed grep (3.12-2)
+[2026-02-21T19:41:42+0000] [ALPM] installed procps-ng (4.0.6-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed sed (4.9-3)
+[2026-02-21T19:41:42+0000] [ALPM] installed tar (1.35-2)
+[2026-02-21T19:41:42+0000] [ALPM] installed libtasn1 (4.21.0-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed libffi (3.5.2-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed libp11-kit (0.26.2-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed p11-kit (0.26.2-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed ca-certificates-utils (20240618-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed ca-certificates-mozilla (3.120.1-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed ca-certificates (20240618-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed brotli (1.2.0-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed libunistring (1.4.1-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed libidn2 (2.3.8-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed libnghttp2 (1.68.0-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed libnghttp3 (1.15.0-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed nettle (3.10.2-1)
+[2026-02-21T19:41:42+0000] [ALPM] installed leancrypto (1.6.0-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed gnutls (3.8.12-2)
+[2026-02-21T19:41:43+0000] [ALPM] installed libngtcp2 (1.20.0-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed libpsl (0.21.5-2)
+[2026-02-21T19:41:43+0000] [ALPM] installed libssh2 (1.11.1-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed curl (8.18.0-3)
+[2026-02-21T19:41:43+0000] [ALPM] installed json-c (0.18-2)
+[2026-02-21T19:41:43+0000] [ALPM] installed gnulib-l10n (20241231-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed icu (78.2-2)
+[2026-02-21T19:41:43+0000] [ALPM] installed libxml2 (2.15.1-5)
+[2026-02-21T19:41:43+0000] [ALPM] installed gettext (1.0-2)
+[2026-02-21T19:41:43+0000] [ALPM] installed hwdata (0.404-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed kmod (34.2-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed pciutils (3.14.0-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed psmisc (23.7-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed shadow (4.18.0-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed util-linux (2.41.3-2)
+[2026-02-21T19:41:43+0000] [ALPM] installed gzip (1.14-2)
+[2026-02-21T19:41:43+0000] [ALPM] installed licenses (20240728-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed libksba (1.6.7-2)
+[2026-02-21T19:41:43+0000] [ALPM] installed libusb (1.0.29-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed libassuan (3.0.0-1)
+[2026-02-21T19:41:43+0000] [ALPM] installed libsysprof-capture (49.0-2)
+[2026-02-21T19:41:44+0000] [ALPM] installed glib2 (2.86.4-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed tpm2-tss (4.1.3-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed libsecret (0.21.7-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed pinentry (1.3.2-2)
+[2026-02-21T19:41:44+0000] [ALPM] installed npth (1.8-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed gnupg (2.4.9-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed gpgme (2.0.1-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed libarchive (3.8.5-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed pacman-mirrorlist (20260213-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed device-mapper (2.03.38-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed popt (1.19-2)
+[2026-02-21T19:41:44+0000] [ALPM] installed cryptsetup (2.8.4-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed expat (2.7.4-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed dbus (1.16.2-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed dbus-broker (37-3)
+[2026-02-21T19:41:44+0000] [ALPM] installed dbus-broker-units (37-3)
+[2026-02-21T19:41:44+0000] [ALPM] installed dbus-units (37-3)
+[2026-02-21T19:41:44+0000] [ALPM] installed kbd (2.9.0-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed libelf (0.194-1)
+[2026-02-21T19:41:44+0000] [ALPM] installed systemd (259.1-1)
+[2026-02-21T19:41:45+0000] [ALPM] installed jansson (2.15.0-1)
+[2026-02-21T19:41:45+0000] [ALPM] installed binutils (2.46-1)
+[2026-02-21T19:41:45+0000] [ALPM] installed libmakepkg-dropins (20-1)
+[2026-02-21T19:41:45+0000] [ALPM] installed pacman (7.1.0.r9.g54d9411-1)
+[2026-02-21T19:41:45+0000] [ALPM] installed archlinux-keyring (20260206-1)
+[2026-02-21T19:41:48+0000] [ALPM] installed systemd-sysvcompat (259.1-1)
+[2026-02-21T19:41:48+0000] [ALPM] installed iputils (20250605-1)
+[2026-02-21T19:41:48+0000] [ALPM] installed libmnl (1.0.5-2)
+[2026-02-21T19:41:48+0000] [ALPM] installed libnftnl (1.3.1-1)
+[2026-02-21T19:41:48+0000] [ALPM] installed libnl (3.12.0-1)
+[2026-02-21T19:41:48+0000] [ALPM] installed libpcap (1.10.6-1)
+[2026-02-21T19:41:48+0000] [ALPM] installed libnfnetlink (1.0.2-2)
+[2026-02-21T19:41:48+0000] [ALPM] installed libnetfilter_conntrack (1.0.9-2)
+[2026-02-21T19:41:48+0000] [ALPM] installed iptables (1:1.8.11-2)
+[2026-02-21T19:41:48+0000] [ALPM] installed libbpf (1.6.2-1)
+[2026-02-21T19:41:48+0000] [ALPM] installed iproute2 (6.19.0-1)
+[2026-02-21T19:41:48+0000] [ALPM] installed base (3-3)
+[2026-02-21T19:41:48+0000] [ALPM] installed mkinitcpio-busybox (1.36.1-1)
+[2026-02-21T19:41:48+0000] [ALPM] installed diffutils (3.12-2)
+[2026-02-21T19:41:48+0000] [ALPM] installed mkinitcpio (40-4)
+[2026-02-21T19:41:50+0000] [ALPM] installed linux (6.18.9.arch1-2)
+[2026-02-21T19:41:50+0000] [ALPM] installed linux-firmware-whence (20260110-1)
+[2026-02-21T19:41:50+0000] [ALPM] installed linux-firmware-amdgpu (20260110-1)
+[2026-02-21T19:41:50+0000] [ALPM] installed linux-firmware-atheros (20260110-1)
+[2026-02-21T19:41:50+0000] [ALPM] installed linux-firmware-broadcom (20260110-1)
+[2026-02-21T19:41:50+0000] [ALPM] installed linux-firmware-cirrus (20260110-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed linux-firmware-intel (20260110-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed linux-firmware-mediatek (20260110-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed linux-firmware-nvidia (20260110-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed linux-firmware-other (20260110-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed linux-firmware-radeon (20260110-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed linux-firmware-realtek (20260110-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed linux-firmware (20260110-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed thin-provisioning-tools (1.3.1-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed libaio (0.3.113-3)
+[2026-02-21T19:41:51+0000] [ALPM] installed lvm2 (2.03.38-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed libmm-glib (1.24.2-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed libndp (1.9-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed gpm (1.20.7.r38.ge82d1a6-6)
+[2026-02-21T19:41:51+0000] [ALPM] installed pcre (8.45-4)
+[2026-02-21T19:41:51+0000] [ALPM] installed slang (2.3.3-4)
+[2026-02-21T19:41:51+0000] [ALPM] installed libnewt (0.52.25-2)
+[2026-02-21T19:41:51+0000] [ALPM] installed nspr (4.38.2-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed nss (3.120.1-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed libnm (1.54.3-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed libdaemon (0.14-6)
+[2026-02-21T19:41:51+0000] [ALPM] installed libsodium (1.0.20-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed libpgm (5.3.128-3)
+[2026-02-21T19:41:51+0000] [ALPM] installed zeromq (4.3.5-3)
+[2026-02-21T19:41:51+0000] [ALPM] installed libteam (1.32-3)
+[2026-02-21T19:41:51+0000] [ALPM] installed mobile-broadband-provider-info (20251101-1)
+[2026-02-21T19:41:51+0000] [ALPM] installed duktape (2.7.0-7)
+[2026-02-21T19:41:51+0000] [ALPM] installed polkit (127-3)
+[2026-02-21T19:41:51+0000] [ALPM] installed pcsclite (2.4.1-1)
+[2026-02-21T19:41:52+0000] [ALPM] installed wpa_supplicant (2:2.11-5)
+[2026-02-21T19:41:52+0000] [ALPM] installed networkmanager (1.54.3-1)
+[2026-02-21T19:41:52+0000] [ALPM] installed sudo (1.9.17.p2-2)
+[2026-02-21T19:41:52+0000] [ALPM] installed vim-runtime (9.2.0038-1)
+[2026-02-21T19:41:52+0000] [ALPM] installed vim (9.2.0038-1)
+[2026-02-21T19:41:52+0000] [ALPM] installed nano (8.7.1-1)
+[2026-02-21T19:41:52+0000] [ALPM] installed libmpc (1.3.1-2)
+[2026-02-21T19:41:52+0000] [ALPM] installed libisl (0.27-1)
+[2026-02-21T19:41:53+0000] [ALPM] installed gcc (15.2.1+r604+g0b99615a8aef-1)
+[2026-02-21T19:41:53+0000] [ALPM] installed gc (8.2.12-1)
+[2026-02-21T19:41:54+0000] [ALPM] installed guile (3.0.11-1)
+[2026-02-21T19:41:54+0000] [ALPM] installed make (4.4.1-2)
+[2026-02-21T19:41:54+0000] [ALPM] installed mpdecimal (4.0.1-1)
+[2026-02-21T19:41:54+0000] [ALPM] installed python (3.14.3-1)
+[2026-02-21T19:41:54+0000] [ALPM] installed gdb-common (17.1-2)
+[2026-02-21T19:41:54+0000] [ALPM] installed xxhash (0.8.3-1)
+[2026-02-21T19:41:54+0000] [ALPM] installed boost-libs (1.89.0-4)
+[2026-02-21T19:41:54+0000] [ALPM] installed source-highlight (3.1.9-16)
+[2026-02-21T19:41:55+0000] [ALPM] installed gdb (17.1-2)
+[2026-02-21T19:41:55+0000] [ALPM] installed xcb-proto (1.17.0-4)
+[2026-02-21T19:41:55+0000] [ALPM] installed xorgproto (2025.1-1)
+[2026-02-21T19:41:55+0000] [ALPM] installed libxdmcp (1.1.5-1)
+[2026-02-21T19:41:55+0000] [ALPM] installed libxau (1.0.12-1)
+[2026-02-21T19:41:55+0000] [ALPM] installed libxcb (1.17.0-1)
+[2026-02-21T19:41:55+0000] [ALPM] installed libx11 (1.8.13-1)
+[2026-02-21T19:41:55+0000] [ALPM] installed libxext (1.3.7-1)
+[2026-02-21T19:41:55+0000] [ALPM] installed libpciaccess (0.18.1-2)
+[2026-02-21T19:41:55+0000] [ALPM] installed libdrm (2.4.131-1)
+[2026-02-21T19:41:55+0000] [ALPM] installed libxshmfence (1.3.3-1)
+[2026-02-21T19:41:55+0000] [ALPM] installed libxxf86vm (1.1.7-1)
+[2026-02-21T19:41:55+0000] [ALPM] installed libedit (20250104_3.1-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed llvm-libs (21.1.8-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed lm_sensors (1:3.6.2-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed spirv-tools (1:1.4.341.0-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed default-cursors (3-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed wayland (1.24.0-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed mesa (1:25.3.5-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed libglvnd (1.7.0-3)
+[2026-02-21T19:41:56+0000] [ALPM] installed libepoxy (1.5.10-3)
+[2026-02-21T19:41:56+0000] [ALPM] installed libpng (1.6.55-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed freetype2 (2.14.1-2)
+[2026-02-21T19:41:56+0000] [ALPM] installed xorg-fonts-encodings (1.1.0-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed libfontenc (1.1.9-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed libxfont2 (2.0.7-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed pixman (0.46.4-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed xkeyboard-config (2.46-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed libxkbfile (1.2.0-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed xorg-xkbcomp (1.5.0-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed libxrender (0.9.12-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed libxrandr (1.5.5-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed xorg-setxkbmap (1.3.4-2)
+[2026-02-21T19:41:56+0000] [ALPM] installed xorg-server-common (21.1.21-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed libunwind (1.8.2-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed libevdev (1.13.6-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed libgudev (238-3)
+[2026-02-21T19:41:56+0000] [ALPM] installed libwacom (2.18.0-2)
+[2026-02-21T19:41:56+0000] [ALPM] installed lua (5.4.8-2)
+[2026-02-21T19:41:56+0000] [ALPM] installed mtdev (1.1.7-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed libinput (1.30.1-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed xf86-input-libinput (1.5.0-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed libxcvt (0.1.3-1)
+[2026-02-21T19:41:56+0000] [ALPM] installed xorg-server (21.1.21-1)
+[2026-02-21T19:41:57+0000] [ALPM] installed libice (1.1.2-1)
+[2026-02-21T19:41:57+0000] [ALPM] installed libsm (1.2.6-1)
+[2026-02-21T19:41:57+0000] [ALPM] installed libxt (1.3.1-1)
+[2026-02-21T19:41:57+0000] [ALPM] installed libxmu (1.3.1-1)
+[2026-02-21T19:41:57+0000] [ALPM] installed xorg-xauth (1.1.5-1)
+[2026-02-21T19:41:57+0000] [ALPM] installed xorg-xrdb (1.2.2-2)
+[2026-02-21T19:41:57+0000] [ALPM] installed xorg-xmodmap (1.0.11-2)
+[2026-02-21T19:41:57+0000] [ALPM] installed xorg-xinit (1.4.4-1)
+[2026-02-21T19:41:57+0000] [ALPM] installed libev (4.33-5)
+[2026-02-21T19:41:57+0000] [ALPM] installed libxkbcommon (1.13.1-1)
+[2026-02-21T19:41:57+0000] [ALPM] installed libxkbcommon-x11 (1.13.1-1)
+[2026-02-21T19:41:57+0000] [ALPM] installed fontconfig (2:2.17.1-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed lzo (2.10-5)
+[2026-02-21T19:41:59+0000] [ALPM] installed cairo (1.18.4-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed fribidi (1.0.16-2)
+[2026-02-21T19:41:59+0000] [ALPM] installed graphite (1:1.3.14-6)
+[2026-02-21T19:41:59+0000] [ALPM] installed harfbuzz (12.3.2-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed libdatrie (0.2.14-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed libthai (0.1.30-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed libxft (2.3.9-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed pango (1:1.57.0-2)
+[2026-02-21T19:41:59+0000] [ALPM] installed xcb-util (0.4.1-2)
+[2026-02-21T19:41:59+0000] [ALPM] installed startup-notification (0.12-9)
+[2026-02-21T19:41:59+0000] [ALPM] installed gnu-free-fonts (20120503-9)
+[2026-02-21T19:41:59+0000] [ALPM] installed xcb-util-renderutil (0.3.10-2)
+[2026-02-21T19:41:59+0000] [ALPM] installed xcb-util-image (0.4.1-3)
+[2026-02-21T19:41:59+0000] [ALPM] installed xcb-util-cursor (0.1.6-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed xcb-util-keysyms (0.4.1-5)
+[2026-02-21T19:41:59+0000] [ALPM] installed xcb-util-wm (0.4.2-2)
+[2026-02-21T19:41:59+0000] [ALPM] installed xcb-util-xrm (1.3-4)
+[2026-02-21T19:41:59+0000] [ALPM] installed yajl (2.1.0-6)
+[2026-02-21T19:41:59+0000] [ALPM] installed i3-wm (4.25.1-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed alsa-topology-conf (1.2.5.1-4)
+[2026-02-21T19:41:59+0000] [ALPM] installed alsa-ucm-conf (1.2.15.3-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed alsa-lib (1.2.15.3-2)
+[2026-02-21T19:41:59+0000] [ALPM] installed confuse (3.3-4)
+[2026-02-21T19:41:59+0000] [ALPM] installed libasyncns (1:0.8+r3+g68cd5af-3)
+[2026-02-21T19:41:59+0000] [ALPM] installed libogg (1.3.6-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed flac (1.5.0-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed mpg123 (1.33.4-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed lame (3.101.r6531-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed libvorbis (1.3.7-4)
+[2026-02-21T19:41:59+0000] [ALPM] installed opus (1.6.1-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed libsndfile (1.2.2-4)
+[2026-02-21T19:41:59+0000] [ALPM] installed libpulse (17.0+r98+gb096704c0-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed i3status (2.15-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed i3lock (2.16-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed libxinerama (1.1.6-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed dmenu (5.4-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed libxfixes (6.0.2-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed libxi (1.8.2-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed libxcursor (1.2.3-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed alacritty (0.16.1-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed hicolor-icon-theme (0.18-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed giflib (5.2.2-2)
+[2026-02-21T19:41:59+0000] [ALPM] installed libjpeg-turbo (3.1.3-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed jbigkit (2.1-8)
+[2026-02-21T19:41:59+0000] [ALPM] installed libdeflate (1.25-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed libwebp (1.6.0-2)
+[2026-02-21T19:41:59+0000] [ALPM] installed libtiff (4.7.1-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed imlib2 (1.12.6-1)
+[2026-02-21T19:41:59+0000] [ALPM] installed libexif (0.6.25-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed feh (3.11.2-2)
+[2026-02-21T19:42:00+0000] [ALPM] installed adwaita-fonts (49.0-2)
+[2026-02-21T19:42:00+0000] [ALPM] installed adwaita-icon-theme-legacy (46.2-3)
+[2026-02-21T19:42:00+0000] [ALPM] installed adwaita-cursors (49.0-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed adwaita-icon-theme (49.0-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed dconf (0.49.0-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed gsettings-system-schemas (49.1-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed gsettings-desktop-schemas (49.1-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed libxtst (1.2.5-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed xorg-xprop (1.2.8-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed at-spi2-core (2.58.3-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed desktop-file-utils (0.28-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed bubblewrap (0.11.0-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed lcms2 (2.18-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed gperftools (2.17.2-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed gtest (1.17.0-2)
+[2026-02-21T19:42:00+0000] [ALPM] installed highway (1.3.0-2)
+[2026-02-21T19:42:00+0000] [ALPM] installed libjxl (0.11.2-2)
+[2026-02-21T19:42:00+0000] [ALPM] installed dav1d (1.5.3-1)
+[2026-02-21T19:42:00+0000] [ALPM] installed librsvg (2:2.61.4-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed glycin (2.0.8-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed shared-mime-info (2.4-3)
+[2026-02-21T19:42:01+0000] [ALPM] installed gdk-pixbuf2 (2.44.4-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed iso-codes (4.20.1-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libcloudproviders (0.4.0-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libcolord (1.4.8-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed avahi (1:0.9rc3-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libcups (2:2.4.16-2)
+[2026-02-21T19:42:01+0000] [ALPM] installed libxcomposite (0.4.7-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libxdamage (1.1.7-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed json-glib (1.10.8-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libproxy (0.5.12-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed glib-networking (1:2.80.1-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libsoup3 (3.6.6-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libstemmer (3.0.1-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed tinysparql (3.10.1-2)
+[2026-02-21T19:42:01+0000] [ALPM] installed gtk-update-icon-cache (1:4.20.3-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed gtk3 (1:3.24.51-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libdbusmenu-glib (18.10.20180917-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libdbusmenu-gtk3 (18.10.20180917-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libappindicator (12.10.1-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed openssh (10.2p1-2)
+[2026-02-21T19:42:01+0000] [ALPM] installed gcr-4 (4.4.0.1-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libnma-common (1.10.6-3)
+[2026-02-21T19:42:01+0000] [ALPM] installed libnma (1.10.6-3)
+[2026-02-21T19:42:01+0000] [ALPM] installed nm-connection-editor (1.36.0-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed network-manager-applet (1.36.0-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed liblzf (3.6-5)
+[2026-02-21T19:42:01+0000] [ALPM] installed libtpms (0.10.2-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libvpx (1.15.2-3)
+[2026-02-21T19:42:01+0000] [ALPM] installed double-conversion (3.4.0-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed libb2 (0.98.1-3)
+[2026-02-21T19:42:01+0000] [ALPM] installed md4c (0.5.2-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed tslib (1.24-1)
+[2026-02-21T19:42:01+0000] [ALPM] installed xdg-utils (1.2.1-2)
+[2026-02-21T19:42:02+0000] [ALPM] installed qt6-translations (6.10.2-1)
+[2026-02-21T19:42:02+0000] [ALPM] installed qt6-base (6.10.2-1)
+[2026-02-21T19:42:02+0000] [ALPM] installed qt6-scxml (6.10.2-1)
+[2026-02-21T19:42:02+0000] [ALPM] installed qt6-tools (6.10.2-1)
+[2026-02-21T19:42:02+0000] [ALPM] installed hidapi (0.15.0-1)
+[2026-02-21T19:42:02+0000] [ALPM] installed sdl3 (3.4.0-4)
+[2026-02-21T19:42:02+0000] [ALPM] installed sdl2-compat (2.32.64-1)
+[2026-02-21T19:42:03+0000] [ALPM] installed glu (9.0.3-3)
+[2026-02-21T19:42:03+0000] [ALPM] installed sdl12-compat (1.2.68-2)
+[2026-02-21T19:42:03+0000] [ALPM] installed virtualbox-host-modules-arch (7.2.6-4)
+[2026-02-21T19:42:03+0000] [ALPM] installed virtualbox (7.2.6-1)
+[2026-02-21T19:42:03+0000] [ALPM] installed aom (3.13.1-2)
+[2026-02-21T19:42:03+0000] [ALPM] installed glslang (1:1.4.341.0-1)
+[2026-02-21T19:42:03+0000] [ALPM] installed gsm (1.0.23-1)
+[2026-02-21T19:42:03+0000] [ALPM] installed db5.3 (5.3.28-7)
+[2026-02-21T19:42:03+0000] [ALPM] installed libsamplerate (0.2.2-3)
+[2026-02-21T19:42:03+0000] [ALPM] installed jack2 (1.9.22-2)
+[2026-02-21T19:42:03+0000] [ALPM] installed libunibreak (6.1-1)
+[2026-02-21T19:42:03+0000] [ALPM] installed libass (0.17.4-1)
+[2026-02-21T19:42:03+0000] [ALPM] installed libraw1394 (2.1.2-4)
+[2026-02-21T19:42:03+0000] [ALPM] installed libavc1394 (0.5.4-7)
+[2026-02-21T19:42:03+0000] [ALPM] installed libbluray (1.4.0-2)
+[2026-02-21T19:42:03+0000] [ALPM] installed libbs2b (3.1.0-10)
+[2026-02-21T19:42:03+0000] [ALPM] installed libdvdread (7.0.1-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed libdvdnav (7.0.0-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed libiec61883 (1.2.0-9)
+[2026-02-21T19:42:04+0000] [ALPM] installed libmodplug (0.8.9.0-6)
+[2026-02-21T19:42:04+0000] [ALPM] installed portaudio (1:19.7.0-3)
+[2026-02-21T19:42:04+0000] [ALPM] installed libopenmpt (0.8.4-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed vulkan-icd-loader (1.4.341.0-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed shaderc (2026.1-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed libdovi (3.3.2-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed libplacebo (7.360.0-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed libsoxr (0.1.3-4)
+[2026-02-21T19:42:04+0000] [ALPM] installed libssh (0.12.0-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed libtheora (1.2.0-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed libva (2.22.0-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed libvdpau (1.5-4)
+[2026-02-21T19:42:04+0000] [ALPM] installed libxv (1.0.13-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed ocl-icd (2.3.4-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed libvpl (2.16.0-2)
+[2026-02-21T19:42:04+0000] [ALPM] installed opencore-amr (0.1.6-2)
+[2026-02-21T19:42:04+0000] [ALPM] installed openjpeg2 (2.5.4-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed rav1e (0.8.1-2)
+[2026-02-21T19:42:04+0000] [ALPM] installed fftw (3.3.10-8)
+[2026-02-21T19:42:04+0000] [ALPM] installed rubberband (4.0.0-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed snappy (1.2.2-3)
+[2026-02-21T19:42:04+0000] [ALPM] installed libmd (1.1.0-2)
+[2026-02-21T19:42:04+0000] [ALPM] installed libbsd (0.12.2-2)
+[2026-02-21T19:42:04+0000] [ALPM] installed sndio (1.10.0-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed speexdsp (1.2.1-2)
+[2026-02-21T19:42:04+0000] [ALPM] installed speex (1.2.1-2)
+[2026-02-21T19:42:04+0000] [ALPM] installed srt (1.5.4-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed svt-av1 (4.0.1-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed v4l-utils (1.32.0-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed zimg (3.0.6-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed vapoursynth (73-2)
+[2026-02-21T19:42:04+0000] [ALPM] installed vid.stab (1.1.1-2)
+[2026-02-21T19:42:04+0000] [ALPM] installed vmaf (3.0.0-2)
+[2026-02-21T19:42:04+0000] [ALPM] installed l-smash (2.14.5-4)
+[2026-02-21T19:42:04+0000] [ALPM] installed x264 (3:0.165.r3222.b35605a-2)
+[2026-02-21T19:42:04+0000] [ALPM] installed x265 (4.1-1)
+[2026-02-21T19:42:04+0000] [ALPM] installed xvidcore (1.3.7-3)
+[2026-02-21T19:42:05+0000] [ALPM] installed ffmpeg (2:8.0.1-7)
+[2026-02-21T19:42:05+0000] [ALPM] installed libxss (1.2.5-1)
+[2026-02-21T19:42:05+0000] [ALPM] installed mailcap (2.1.54-2)
+[2026-02-21T19:42:06+0000] [ALPM] installed firefox (147.0.4-1)
+[2026-02-21T19:42:06+0000] [ALPM] installed htop (3.4.1-1)
+[2026-02-21T19:42:06+0000] [ALPM] installed grub (2:2.14-1)
+[2026-02-21T19:42:06+0000] [ALPM] installed efivar (39-1)
+[2026-02-21T19:42:06+0000] [ALPM] installed efibootmgr (18-3)
+[2026-02-21T21:16:03+0100] [ALPM] installed fuse-common (3.18.1-1)
+[2026-02-21T21:16:03+0100] [ALPM] installed fuse3 (3.18.1-1)
+[2026-02-21T21:16:03+0100] [ALPM] installed libdnet (1.18.2-1)
+[2026-02-21T21:16:03+0100] [ALPM] installed libmspack (1:1.11-1)
+[2026-02-21T21:16:03+0100] [ALPM] installed libsigc++ (2.12.1-2)
+[2026-02-21T21:16:03+0100] [ALPM] installed lsb-release (2.0.r55.a25a4fc-1)
+[2026-02-21T21:16:03+0100] [ALPM] installed uriparser (1.0.0-1)
+[2026-02-21T21:16:03+0100] [ALPM] installed which (2.23-1)
+[2026-02-21T21:16:03+0100] [ALPM] installed libxslt (1.1.45-2)
+[2026-02-21T21:16:03+0100] [ALPM] installed libtool (2.6.0-4)
+[2026-02-21T21:16:03+0100] [ALPM] installed xmlsec (1.3.9-1)
+[2026-02-21T21:16:04+0100] [ALPM] installed open-vm-tools (6:13.0.10-1)
+

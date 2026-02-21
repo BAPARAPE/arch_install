@@ -56,30 +56,35 @@ mount /dev/vg0/virtbox /mnt/var/lib/virtualbox
 
 swapon /dev/vg0/swap
 
-echo "==> Installation du système de base (pacstrap)"
-pacstrap /mnt base linux linux-firmware lvm2 vim sudo
+echo "==> Installation du système de base"
+pacstrap /mnt base linux linux-firmware lvm2 cryptsetup \
+networkmanager sudo vim nano gcc make gdb \
+xorg-server xorg-xinit i3-wm i3status i3lock dmenu alacritty feh \
+network-manager-applet virtualbox virtualbox-host-modules-arch \
+firefox htop grub efibootmgr
 
 echo "==> Génération du fstab"
 genfstab -U /mnt >> /mnt/etc/fstab
 
-echo "==> Ajout de /tmp en tmpfs dans le fstab"
+echo "==> Ajout de /tmp en tmpfs"
 echo "tmpfs  /tmp  tmpfs  defaults,noexec,nosuid,nodev 0 0" >> /mnt/etc/fstab
 
-echo "==> Définition du hostname"
-arch-chroot /mnt /bin/bash -c "echo $HOSTNAME > /etc/hostname"
+echo "==> Configuration du système (chroot)"
 
-# Correction warning vconsole
-arch-chroot /mnt /bin/bash -c "echo KEYMAP=fr > /etc/vconsole.conf"
-
-echo "==> Configuration de mkinitcpio pour LUKS et LVM"
 arch-chroot /mnt /bin/bash -c "
+
+echo $HOSTNAME > /etc/hostname
+echo KEYMAP=fr > /etc/vconsole.conf
+
+ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
+hwclock --systohc
+
+sed -i 's/#fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen
+locale-gen
+echo LANG=fr_FR.UTF-8 > /etc/locale.conf
+
 sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect modconf block keyboard encrypt lvm2 filesystems fsck)/' /etc/mkinitcpio.conf
 mkinitcpio -P
-"
-
-echo "==> Installation et configuration de GRUB pour UEFI + LUKS"
-arch-chroot /mnt /bin/bash -c "
-pacman -S --noconfirm grub efibootmgr
 
 UUID=\$(blkid -s UUID -o value /dev/sda2)
 
@@ -88,57 +93,46 @@ sed -i 's|#GRUB_ENABLE_CRYPTODISK=y|GRUB_ENABLE_CRYPTODISK=y|' /etc/default/grub
 
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
-"
 
-echo "==> Le volume secret est chiffré et sera monté manuellement par l'utilisateur"
-echo "==> Script terminé, la partie de ton pote peut prendre la suite !"
-lsblk -f
+echo root:$PASSWORD | chpasswd
 
-echo "==> Installation des logiciels de base"
-pacstrap /mnt base linux linux-firmware networkmanager sudo vim nano gcc make gdb xorg-server xorg-xinit i3 i3status dmenu alacritty feh network-manager-applet virtualbox virtualbox-host-modules-arch firefox htop neofetch lvm2 cryptsetup
-genfstab -U /mnt >> /mnt/etc/fstab
-
-echo "==> Modification de la Timezone"
-ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
-hwclock --systohc
-sed -i 's/#fr_FR.UTF-8/fr_FR.UTF-8/' /etc/locale.gen
-locale-gen
-echo "LANG=fr_FR.UTF-8" > /etc/locale.conf
-
-echo "==> Configuration des utilisateurs"
 useradd -m -G wheel pere
 useradd -m fils
-echo "pere:$PASSWORD" | chpasswd
-echo "fils:$PASSWORD" | chpasswd
 
-echo "==> Configuration des groupes et volume partagé"
+echo pere:$PASSWORD | chpasswd
+echo fils:$PASSWORD | chpasswd
+
+sed -i 's/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+
 groupadd famille
 usermod -aG famille pere
 usermod -aG famille fils
+
 chown :famille /share
 chmod 770 /share
 
-echo "==> Activation du Réseau"
+usermod -aG vboxusers pere
+
 systemctl enable NetworkManager
 
-echo "==> Configuration de base i3"
 mkdir -p /home/pere/.config/i3
-cat <<I3 > /home/pere/.config/i3/config
+
+cat > /home/pere/.config/i3/config <<I3
 set \$mod Mod4
 font pango:monospace 10
 bindsym \$mod+Return exec alacritty
 bindsym \$mod+d exec dmenu_run
 bindsym \$mod+Shift+q kill
 bindsym \$mod+Shift+r restart
-bindsym \$mod+Shift+e exec "i3-msg exit"
-set \$ws1 "1: Dev"
-set \$ws2 "2: Web"
-set \$ws3 "3: VBox"
+bindsym \$mod+Shift+e exec \"i3-msg exit\"
+set \$ws1 \"1: Dev\"
+set \$ws2 \"2: Web\"
+set \$ws3 \"3: VBox\"
 bindsym \$mod+1 workspace \$ws1
 bindsym \$mod+2 workspace \$ws2
 bindsym \$mod+3 workspace \$ws3
 bar {
-status_command i3status
+    status_command i3status
 }
 exec --no-startup-id nm-applet
 I3
@@ -146,9 +140,11 @@ I3
 chown -R pere:pere /home/pere/.config
 
 for user in pere fils; do
-echo "exec i3" > /home/\$user/.xinitrc
-chown \$user:\$user /home/\$user/.xinitrc
+    echo exec i3 > /home/\$user/.xinitrc
+    chown \$user:\$user /home/\$user/.xinitrc
 done
 
-echo "==> Redémarrage du système"
+"
+
+echo "==> Script terminé, redémarrage"
 reboot
